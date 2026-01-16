@@ -10,25 +10,25 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="tb_produtos")
-public class ProdutoEntidade {
+@Table(name="tb_products")
+public class ProductEntity {
 
     @Id
-    @Column(name = "id_produto")
+    @Column(name = "id_product")
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    private String nome;
+    private String name;
 
-    private BigDecimal preco;
+    private BigDecimal price;
 
-    public ProdutoEntidade() {
+    public ProductEntity() {
     }
 
-    public ProdutoEntidade(Long id, String nome, BigDecimal preco) {
+    public ProductEntity(Long id, String name, BigDecimal price) {
         this.id = id;
-        this.nome = nome;
-        this.preco = preco;
+        this.name = name;
+        this.price = price;
     }
 
     public Long getId() {
@@ -39,19 +39,19 @@ public class ProdutoEntidade {
         this.id = id;
     }
 
-    public String getNome() {
-        return nome;
+    public String getName() {
+        return name;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public BigDecimal getPreco() {
-        return preco;
+    public BigDecimal getPrice() {
+        return price;
     }
 
-    public void setPreco(BigDecimal preco) {
-        this.preco = preco;
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }   
 }

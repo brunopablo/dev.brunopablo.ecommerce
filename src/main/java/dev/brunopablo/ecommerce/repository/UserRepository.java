@@ -3,7 +3,7 @@ package dev.brunopablo.ecommerce.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import dev.brunopablo.ecommerce.entity.PedidoEntidade;
+import dev.brunopablo.ecommerce.entity.UserEntity;
 
 @Repository
-public interface PedidoRepositorio extends JpaRepository<PedidoEntidade, Long>{}
+public interface UserRepository extends JpaRepository<UserEntity, Long>{}

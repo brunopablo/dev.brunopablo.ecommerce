@@ -8,30 +8,30 @@ import jakarta.persistence.Table;
 
 
 @Entity
-@Table(name="tb_item_pedido")
-public class ItemPedido {
+@Table(name="tb_order_item")
+public class OrderItem {
 
     @EmbeddedId
-    private ItemPedidoId id;
+    private OrderItemId id;
 
     private BigDecimal total;
 
-    private Integer quantidade;
+    private Integer quantity;
 
-    public ItemPedido() {
+    public OrderItem() {
     }
 
-    public ItemPedido(ItemPedidoId id, BigDecimal total, Integer quantidade) {
+    public OrderItem(OrderItemId id, Integer quantity, BigDecimal total) {
         this.id = id;
+        this.quantity = quantity;
         this.total = total;
-        this.quantidade = quantidade;
     }
 
-    public ItemPedidoId getId() {
+    public OrderItemId getId() {
         return id;
     }
 
-    public void setId(ItemPedidoId id) {
+    public void setId(OrderItemId id) {
         this.id = id;
     }
 
@@ -43,11 +43,13 @@ public class ItemPedido {
         this.total = total;
     }
 
-    public Integer getQuantidade() {
-        return quantidade;
+    public Integer getQuantity() {
+        return quantity;
     }
 
-    public void setQuantidade(Integer quantidade) {
-        this.quantidade = quantidade;
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
+
+
 }

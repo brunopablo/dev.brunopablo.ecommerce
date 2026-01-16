@@ -3,7 +3,7 @@ package dev.brunopablo.ecommerce.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import dev.brunopablo.ecommerce.entity.UsuarioEntidade;
+import dev.brunopablo.ecommerce.entity.ProductEntity;
 
 @Repository
-public interface UsuarioRepositorio extends JpaRepository<UsuarioEntidade, Long>{}
+public interface ProductRepository extends JpaRepository<ProductEntity, Long>{}
