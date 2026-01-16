@@ -1,0 +1,37 @@
+Estrutura do Projeto
+Entidades
+Defina as relações:
+Usuário para Endereço de Cobrança (one-to-one)
+Pedido para Usuário (many-to-one)
+Pedido para Item do Pedido (one-to-many)
+Item do Pedido para Pedido (many-to-one)
+Item do Pedido para Produto (many-to-one)
+Produto para Tags (many-to-many)
+Regras do projeto
+Precisamos das seguintes informações nas tabelas:
+Usuário:
+Código do Usuário
+Nome Completo
+Endereço de Cobrança:
+Rua
+Numero
+Complemento
+Usuário que pertence este endereço
+Pedido:
+Numero do pedido
+Valor total
+Data do pedido
+Usuário que fez o pedido
+Item do Pedido:
+A qual pedido pertence este item
+A qual produto pertence este item
+Valor pago pelo usuário no item
+Quantidade de itens
+Produto:
+Código do produto
+Nome
+Preço
+Tags vinculadas ao produto
+Tag:
+Código da tag
+Nome
