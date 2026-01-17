@@ -1,12 +1,14 @@
 package dev.brunopablo.ecommerce.service;
 
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
-import dev.brunopablo.ecommerce.controller.dto.CreateUserRequest;
+import dev.brunopablo.ecommerce.controller.dto.CreateOrUpdateUserRequest;
 import dev.brunopablo.ecommerce.entity.BillingAddressEntity;
 import dev.brunopablo.ecommerce.entity.UserEntity;
 import dev.brunopablo.ecommerce.repository.BillingAddressRepository;
@@ -24,7 +26,7 @@ public class UserService {
         this.billingAddressRepository = billingAddressRepository;
     }
     
-    public UserEntity createUser(CreateUserRequest createUserRequest){
+    public UserEntity createUser(CreateOrUpdateUserRequest createUserRequest){
         
         var billingAddresEntity = billingAddressRepository.save(getBillingAddresEntity(createUserRequest));
         
@@ -32,7 +34,7 @@ public class UserService {
         
     }
 
-    private UserEntity getUserEntity(CreateUserRequest createUserRequest, BillingAddressEntity billingAddresEntity) {
+    private UserEntity getUserEntity(CreateOrUpdateUserRequest createUserRequest, BillingAddressEntity billingAddresEntity) {
 
         var user = new UserEntity();
 
@@ -43,7 +45,7 @@ public class UserService {
         return user; 
     }
     
-    private BillingAddressEntity getBillingAddresEntity(CreateUserRequest createUserRequest) {
+    private BillingAddressEntity getBillingAddresEntity(CreateOrUpdateUserRequest createUserRequest) {
 
         var billingAddres = new BillingAddressEntity();
         
@@ -56,6 +58,23 @@ public class UserService {
         return billingAddres;
     }
 
+
+    public Optional<UserEntity> updateUserById(Long userId, CreateOrUpdateUserRequest updateUserRequest){
+
+        var userEntity = userRepository.findById(userId);
+
+        if(userEntity.isPresent()){
+            userEntity.get().getBilling_address().setNumber(updateUserRequest.number());
+            userEntity.get().getBilling_address().setAddress(updateUserRequest.address());
+            userEntity.get().getBilling_address().setComplement(updateUserRequest.complement());
+            userEntity.get().setName(updateUserRequest.name());
+
+            userRepository.save(userEntity.get());
+        }
+
+        return userEntity;
+    }
+
     public Page<UserEntity> listUsers(Integer pageNumber, Integer pageSize, String orderBy) {
         
         var pageRequest = getPageRequest(pageNumber, pageSize, orderBy);
@@ -66,12 +85,24 @@ public class UserService {
     }
 
     private PageRequest getPageRequest(Integer pageNumber, Integer pageSize, String orderBy) {
-        
+
         Direction orderByDirection = Sort.Direction.DESC;
 
         if(orderBy.equalsIgnoreCase("asc"))
             orderByDirection = Sort.Direction.ASC;
 
         return PageRequest.of(pageNumber, pageSize, orderByDirection, "name");
+    }
+
+    public boolean  deleteUserById(Long userId) {
+        
+        var userExists = userRepository.existsById(userId);
+
+        if(userExists){
+            userRepository.deleteById(userId);
+            return true;
+        }
+
+        return false;
     }
 }
