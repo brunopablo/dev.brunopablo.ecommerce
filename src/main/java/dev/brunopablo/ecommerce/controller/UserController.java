@@ -21,11 +21,11 @@ import dev.brunopablo.ecommerce.service.UserService;
 
 @RestController
 @RequestMapping("/users")
-public class UsuarioController {
+public class UserController {
     
     private final UserService userService;
     
-    public UsuarioController(UserService userService) {
+    public UserController(UserService userService) {
         this.userService = userService;
     }
     
