@@ -1,5 +1,5 @@
 package dev.brunopablo.ecommerce.controller.dto;
 
-public record PaginationOrderResponse(OrderResponse orders) {
+import java.util.List;
 
-}
+public record PaginationOrderResponse(List<OrderResponse> order) {}

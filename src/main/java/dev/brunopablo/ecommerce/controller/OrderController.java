@@ -13,67 +13,77 @@ import org.springframework.web.bind.annotation.RestController;
 import dev.brunopablo.ecommerce.controller.dto.ApiResponse;
 import dev.brunopablo.ecommerce.controller.dto.CreateOrderRequest;
 import dev.brunopablo.ecommerce.controller.dto.OrderItemIdResponse;
-import dev.brunopablo.ecommerce.controller.dto.OrderItemResponse;
 import dev.brunopablo.ecommerce.controller.dto.OrderResponse;
+import dev.brunopablo.ecommerce.controller.dto.PaginationItemResponse;
+import dev.brunopablo.ecommerce.controller.dto.PaginationProductInfoResponse;
 import dev.brunopablo.ecommerce.controller.dto.PaginationRequest;
+import dev.brunopablo.ecommerce.controller.dto.PaginationUserResponse;
 import dev.brunopablo.ecommerce.service.OrderService;
 
 @RestController
 @RequestMapping("/order")
 public class OrderController {
-
+    
     private final OrderService orderService;
-
+    
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
     }
-
+    
     @PostMapping
     public ResponseEntity<String> createOrder(@RequestBody CreateOrderRequest newOrderRequest){
-
-        IO.println("ID USUARIO = " + newOrderRequest.idUser());
-
+            
         var order = orderService.createOrder(newOrderRequest);
-
+        
         return ResponseEntity.created(URI.create("/order/" + order.getId())).build();
     }
+    
 
     @GetMapping
     public ResponseEntity<ApiResponse<OrderResponse>> listOrders(
         @RequestParam(name="pageNumber", defaultValue="0") Integer pageNumber,
         @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
-        @RequestParam(name="orderBy", defaultValue="desc") String orderBy
+        @RequestParam(name="orderBy", defaultValue="desc") String orderBy,
+        @RequestParam(name="userName", required=false) String userName
     ){
-
-        var pages = orderService.listOrders(pageNumber, pageSize, orderBy);
-
-        var apiResponse = new ApiResponse<>(
-            pages.getContent().stream().map(
-                page -> new OrderResponse(
-                    page.getId(),
-                    page.getTotal(),
-                    page.getDateOrder(),
+        
+        var pages = orderService.listOrders(pageNumber, pageSize, orderBy, userName);
+        
+        var orderResponse = pages.getContent().stream().map(
+            page -> new OrderResponse(
+                new PaginationUserResponse(
                     page.getUser().getId(),
-                    page.getItems().stream().map(
-                        orderItem -> new OrderItemResponse(
-                            new OrderItemIdResponse(
-                                orderItem.getId().getOrder().getId(),
-                                orderItem.getId().getProduct().getId()
-                            ),
-                            orderItem.getTotal(),
-                            orderItem.getQuantity()
-                        )
-                    ).toList()
-                )
-            ).toList(),
+                    page.getUser().getName()
+                ),
+                page.getTotal(),
+                page.getItems().stream().map(
+                    item -> new PaginationItemResponse(
+                        new OrderItemIdResponse(
+                            item.getId().getOrder().getId(),
+                            item.getId().getProduct().getId()
+                        ),
+                        new PaginationProductInfoResponse(
+                            item.getId().getProduct().getName(),
+                            item.getId().getProduct().getPrice()
+                        ),
+                        item.getQuantity(),
+                        item.getTotal()
+                    )
+                ).toList()
+            )
+        ).toList();
+        
+        
+        var apiResponse = new ApiResponse<>(
+            orderResponse,
             new PaginationRequest(
                 pages.getNumber(),
                 pages.getSize(),
                 pages.getTotalElements(),
                 pages.getTotalPages()
             )
-        );
-
+        );   
+        
         return ResponseEntity.ok(apiResponse);
     }
 }

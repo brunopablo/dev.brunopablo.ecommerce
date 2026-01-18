@@ -113,20 +113,26 @@ public class OrderService {
         );
     }
 
-    public Page<OrderEntity> listOrders(Integer pageNumber, Integer pageSize, String orderBy) {
+    public Page<OrderEntity> listOrders(Integer pageNumber, 
+                                        Integer pageSize, 
+                                        String orderBy, 
+                                        String userName) {
 
         var pageRequest = util.makePageRequest(pageNumber, 
                                                pageSize, 
                                                orderBy,
                                                "dateOrder");
 
-
-        var pages = getPages(pageRequest);
+        var pages = getPages(pageRequest, userName);
 
         return pages;
     }
 
-    private Page<OrderEntity> getPages(PageRequest pageRequest) {
+    private Page<OrderEntity> getPages(PageRequest pageRequest, String userName) {
+
+        if(userName != null){
+            return orderRepository.findByUser_Name(userName, pageRequest);
+        }
 
         return orderRepository.findAll(pageRequest);
     }
