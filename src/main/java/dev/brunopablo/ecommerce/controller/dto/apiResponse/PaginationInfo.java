@@ -1,6 +1,6 @@
 package dev.brunopablo.ecommerce.controller.dto.apiResponse;
 
-public record PaginationRequest(Integer pageNumber,
+public record PaginationInfo(Integer pageNumber,
                                 Integer pageSize,
                                 Long totalElements,
                                 Integer totalPages) {}

@@ -11,7 +11,7 @@ import dev.brunopablo.ecommerce.entity.BillingAddressEntity;
 import dev.brunopablo.ecommerce.entity.UserEntity;
 import dev.brunopablo.ecommerce.repository.BillingAddressRepository;
 import dev.brunopablo.ecommerce.repository.UserRepository;
-import dev.brunopablo.ecommerce.util.DoPageRequest;
+import dev.brunopablo.ecommerce.util.Utils;
 
 @Service
 public class UserService {
@@ -20,9 +20,9 @@ public class UserService {
     
     private final BillingAddressRepository billingAddressRepository;
 
-    private final DoPageRequest utils;
+    private final Utils utils;
     
-    public UserService(UserRepository userRepository, BillingAddressRepository billingAddressRepository, DoPageRequest utils) {
+    public UserService(UserRepository userRepository, BillingAddressRepository billingAddressRepository, Utils utils) {
         this.userRepository = userRepository;
         this.billingAddressRepository = billingAddressRepository;
         this.utils = utils;

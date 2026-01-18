@@ -18,12 +18,12 @@ import dev.brunopablo.ecommerce.entity.ProductEntity;
 import dev.brunopablo.ecommerce.repository.OrderRepository;
 import dev.brunopablo.ecommerce.repository.ProductRepository;
 import dev.brunopablo.ecommerce.repository.UserRepository;
-import dev.brunopablo.ecommerce.util.DoPageRequest;
+import dev.brunopablo.ecommerce.util.Utils;
 
 @Service
 public class OrderService {
 
-    private final DoPageRequest util;
+    private final Utils util;
 
     private final OrderRepository orderRepository;
 
@@ -34,7 +34,7 @@ public class OrderService {
     public OrderService(OrderRepository orderRepository, 
                         ProductRepository productRepository, 
                         UserRepository userRepository,
-                        DoPageRequest util) {
+                        Utils util) {
         this.orderRepository = orderRepository;
         this.productRepository = productRepository;
         this.userRepository = userRepository;

@@ -4,13 +4,16 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
+import dev.brunopablo.ecommerce.controller.dto.apiResponse.PaginationInfo;
+
 @Component
-public class DoPageRequest {
+public class Utils {
 
     public PageRequest makePageRequest(Integer pageNumber, 
                                        Integer pageSize, 
                                        String orderBy, 
-                                       String fieldOrderBy){
+                                       String fieldOrderBy
+    ){
 
         var orderByDirection = Sort.Direction.DESC;
 
@@ -18,5 +21,11 @@ public class DoPageRequest {
             orderByDirection = Sort.Direction.ASC;
 
         return PageRequest.of(pageNumber, pageSize, orderByDirection, fieldOrderBy);
+    }
+
+    
+    public PaginationInfo makePaginationInfoResponse(int i, int j, long l, int k){
+
+        return null;
     }
 }

@@ -14,21 +14,24 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.brunopablo.ecommerce.controller.dto.apiResponse.ApiResponse;
-import dev.brunopablo.ecommerce.controller.dto.apiResponse.PaginationRequest;
 import dev.brunopablo.ecommerce.controller.dto.createOrUpdateUserRequest.CreateOrUpdateUserRequest;
 import dev.brunopablo.ecommerce.entity.UserEntity;
 import dev.brunopablo.ecommerce.service.UserService;
+import dev.brunopablo.ecommerce.util.Utils;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
     
     private final UserService userService;
+
+    private final Utils utils;
     
-    public UserController(UserService userService) {
+    public UserController(UserService userService, Utils utils) {
         this.userService = userService;
+        this.utils = utils;
     }
-    
+
     @PostMapping
     public ResponseEntity<String> createUser(
         @RequestBody CreateOrUpdateUserRequest createUserRequest
@@ -49,11 +52,10 @@ public class UserController {
         return ResponseEntity.ok().body(
             new ApiResponse<>(
                 pages.getContent(),
-                new PaginationRequest(
-                    pages.getNumber(),
-                    pages.getSize(),
-                    pages.getTotalElements(),
-                    pages.getTotalPages()
+                utils.makePaginationInfoResponse(pages.getNumber(),
+                                                 pages.getSize(),
+                                                 pages.getTotalElements(),
+                                                 pages.getTotalPages()
                 )
             )
         );
