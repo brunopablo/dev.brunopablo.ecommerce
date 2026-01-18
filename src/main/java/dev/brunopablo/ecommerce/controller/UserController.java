@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import dev.brunopablo.ecommerce.controller.dto.ApiResponse;
-import dev.brunopablo.ecommerce.controller.dto.CreateOrUpdateUserRequest;
-import dev.brunopablo.ecommerce.controller.dto.PaginationRequest;
+import dev.brunopablo.ecommerce.controller.dto.apiResponse.ApiResponse;
+import dev.brunopablo.ecommerce.controller.dto.apiResponse.PaginationRequest;
+import dev.brunopablo.ecommerce.controller.dto.createOrUpdateUserRequest.CreateOrUpdateUserRequest;
 import dev.brunopablo.ecommerce.entity.UserEntity;
 import dev.brunopablo.ecommerce.service.UserService;
 
@@ -30,8 +30,9 @@ public class UserController {
     }
     
     @PostMapping
-    public ResponseEntity<String> createUser(@RequestBody CreateOrUpdateUserRequest createUserRequest){
-        
+    public ResponseEntity<String> createUser(
+        @RequestBody CreateOrUpdateUserRequest createUserRequest
+    ){        
         var userEntity = userService.createUser(createUserRequest);
         
         return ResponseEntity.created(URI.create("/users/" + userEntity.getId())).build();

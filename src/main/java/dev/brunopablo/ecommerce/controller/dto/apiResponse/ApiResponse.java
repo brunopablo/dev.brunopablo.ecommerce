@@ -1,4 +1,4 @@
-package dev.brunopablo.ecommerce.controller.dto;
+package dev.brunopablo.ecommerce.controller.dto.apiResponse;
 
 import java.util.List;
 

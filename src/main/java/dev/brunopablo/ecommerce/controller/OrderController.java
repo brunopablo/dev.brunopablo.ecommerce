@@ -10,14 +10,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import dev.brunopablo.ecommerce.controller.dto.ApiResponse;
-import dev.brunopablo.ecommerce.controller.dto.CreateOrderRequest;
-import dev.brunopablo.ecommerce.controller.dto.OrderItemIdResponse;
-import dev.brunopablo.ecommerce.controller.dto.OrderResponse;
-import dev.brunopablo.ecommerce.controller.dto.PaginationItemResponse;
-import dev.brunopablo.ecommerce.controller.dto.PaginationProductInfoResponse;
-import dev.brunopablo.ecommerce.controller.dto.PaginationRequest;
-import dev.brunopablo.ecommerce.controller.dto.PaginationUserResponse;
+import dev.brunopablo.ecommerce.controller.dto.apiResponse.ApiResponse;
+import dev.brunopablo.ecommerce.controller.dto.apiResponse.PaginationRequest;
+import dev.brunopablo.ecommerce.controller.dto.createOrderRequest.CreateOrderRequest;
+import dev.brunopablo.ecommerce.controller.dto.paginationOrderResponse.PaginationItemResponse;
+import dev.brunopablo.ecommerce.controller.dto.paginationOrderResponse.PaginationOrderItemIdResponse;
+import dev.brunopablo.ecommerce.controller.dto.paginationOrderResponse.PaginationOrderResponse;
+import dev.brunopablo.ecommerce.controller.dto.paginationOrderResponse.PaginationProductInfoResponse;
+import dev.brunopablo.ecommerce.controller.dto.paginationOrderResponse.PaginationTagInfoResponse;
+import dev.brunopablo.ecommerce.controller.dto.paginationOrderResponse.PaginationUserResponse;
 import dev.brunopablo.ecommerce.service.OrderService;
 
 @RestController
@@ -40,7 +41,7 @@ public class OrderController {
     
 
     @GetMapping
-    public ResponseEntity<ApiResponse<OrderResponse>> listOrders(
+    public ResponseEntity<ApiResponse<PaginationOrderResponse>> listOrders(
         @RequestParam(name="pageNumber", defaultValue="0") Integer pageNumber,
         @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
         @RequestParam(name="orderBy", defaultValue="desc") String orderBy,
@@ -50,7 +51,7 @@ public class OrderController {
         var pages = orderService.listOrders(pageNumber, pageSize, orderBy, userName);
         
         var orderResponse = pages.getContent().stream().map(
-            page -> new OrderResponse(
+            page -> new PaginationOrderResponse(
                 new PaginationUserResponse(
                     page.getUser().getId(),
                     page.getUser().getName()
@@ -58,13 +59,19 @@ public class OrderController {
                 page.getTotal(),
                 page.getItems().stream().map(
                     item -> new PaginationItemResponse(
-                        new OrderItemIdResponse(
+                        new PaginationOrderItemIdResponse(
                             item.getId().getOrder().getId(),
                             item.getId().getProduct().getId()
                         ),
                         new PaginationProductInfoResponse(
                             item.getId().getProduct().getName(),
-                            item.getId().getProduct().getPrice()
+                            item.getId().getProduct().getPrice(),
+                            item.getId().getProduct().getTags().stream().map(
+                                tag -> new PaginationTagInfoResponse(
+                                    tag.getId(),
+                                    tag.getName()
+                                )
+                            ).toList()
                         ),
                         item.getQuantity(),
                         item.getTotal()

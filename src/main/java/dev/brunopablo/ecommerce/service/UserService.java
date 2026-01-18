@@ -4,15 +4,14 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
-import dev.brunopablo.ecommerce.controller.dto.CreateOrUpdateUserRequest;
+import dev.brunopablo.ecommerce.controller.dto.createOrUpdateUserRequest.CreateOrUpdateUserRequest;
 import dev.brunopablo.ecommerce.entity.BillingAddressEntity;
 import dev.brunopablo.ecommerce.entity.UserEntity;
 import dev.brunopablo.ecommerce.repository.BillingAddressRepository;
 import dev.brunopablo.ecommerce.repository.UserRepository;
+import dev.brunopablo.ecommerce.util.DoPageRequest;
 
 @Service
 public class UserService {
@@ -20,10 +19,13 @@ public class UserService {
     private final UserRepository userRepository;
     
     private final BillingAddressRepository billingAddressRepository;
+
+    private final DoPageRequest utils;
     
-    public UserService(UserRepository userRepository, BillingAddressRepository billingAddressRepository) {
+    public UserService(UserRepository userRepository, BillingAddressRepository billingAddressRepository, DoPageRequest utils) {
         this.userRepository = userRepository;
         this.billingAddressRepository = billingAddressRepository;
+        this.utils = utils;
     }
     
     public UserEntity createUser(CreateOrUpdateUserRequest createUserRequest){
@@ -86,12 +88,7 @@ public class UserService {
 
     private PageRequest getPageRequest(Integer pageNumber, Integer pageSize, String orderBy) {
 
-        Direction orderByDirection = Sort.Direction.DESC;
-
-        if(orderBy.equalsIgnoreCase("asc"))
-            orderByDirection = Sort.Direction.ASC;
-
-        return PageRequest.of(pageNumber, pageSize, orderByDirection, "name");
+        return utils.makePageRequest(pageNumber, pageSize, orderBy, "name");
     }
 
     public boolean  deleteUserById(Long userId) {

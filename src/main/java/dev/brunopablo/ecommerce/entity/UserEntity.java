@@ -1,5 +1,6 @@
 package dev.brunopablo.ecommerce.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,7 +22,7 @@ public class UserEntity {
     @Column(name="name")
     private String name;
 
-    @OneToOne
+    @OneToOne(cascade=CascadeType.ALL)
     @JoinColumn(name="id_billing_address")
     private BillingAddressEntity billing_address;
 

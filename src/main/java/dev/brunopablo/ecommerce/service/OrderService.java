@@ -10,37 +10,32 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import dev.brunopablo.ecommerce.controller.dto.CreateOrderRequest;
+import dev.brunopablo.ecommerce.controller.dto.createOrderRequest.CreateOrderRequest;
 import dev.brunopablo.ecommerce.entity.OrderEntity;
 import dev.brunopablo.ecommerce.entity.OrderItemEntity;
 import dev.brunopablo.ecommerce.entity.OrderItemId;
 import dev.brunopablo.ecommerce.entity.ProductEntity;
-import dev.brunopablo.ecommerce.repository.OrderItemRepository;
 import dev.brunopablo.ecommerce.repository.OrderRepository;
 import dev.brunopablo.ecommerce.repository.ProductRepository;
 import dev.brunopablo.ecommerce.repository.UserRepository;
-import dev.brunopablo.ecommerce.util.Util;
+import dev.brunopablo.ecommerce.util.DoPageRequest;
 
 @Service
 public class OrderService {
 
-    private final Util util;
+    private final DoPageRequest util;
 
     private final OrderRepository orderRepository;
-
-    private final OrderItemRepository orderItemRepository;
 
     private final ProductRepository productRepository;
 
     private final UserRepository userRepository;
 
     public OrderService(OrderRepository orderRepository, 
-                        OrderItemRepository orderItemRepository,
                         ProductRepository productRepository, 
                         UserRepository userRepository,
-                        Util util) {
+                        DoPageRequest util) {
         this.orderRepository = orderRepository;
-        this.orderItemRepository = orderItemRepository;
         this.productRepository = productRepository;
         this.userRepository = userRepository;
         this.util = util;

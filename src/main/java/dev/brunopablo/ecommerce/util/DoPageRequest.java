@@ -5,7 +5,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Util {
+public class DoPageRequest {
 
     public PageRequest makePageRequest(Integer pageNumber, 
                                        Integer pageSize, 
