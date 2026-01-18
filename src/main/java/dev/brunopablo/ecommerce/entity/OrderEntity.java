@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,7 +16,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="tb_pedidos")
+@Table(name="tb_order")
 public class OrderEntity {
 
     @Id
@@ -33,13 +34,13 @@ public class OrderEntity {
     @JoinColumn(name="id_user")
     private UserEntity user;
 
-    @OneToMany(mappedBy = "id.order")
-    private List<OrderItem> items;
+    @OneToMany(mappedBy = "id.order", cascade=CascadeType.ALL)
+    private List<OrderItemEntity> items;
 
     public OrderEntity() {
     }
 
-    public OrderEntity(LocalDateTime dateOrder, Long id, List<OrderItem> items, BigDecimal total, UserEntity user) {
+    public OrderEntity(LocalDateTime dateOrder, Long id, List<OrderItemEntity> items, BigDecimal total, UserEntity user) {
         this.dateOrder = dateOrder;
         this.id = id;
         this.items = items;
@@ -79,11 +80,11 @@ public class OrderEntity {
         this.user = user;
     }
 
-    public List<OrderItem> getItems() {
+    public List<OrderItemEntity> getItems() {
         return items;
     }
 
-    public void setItems(List<OrderItem> items) {
+    public void setItems(List<OrderItemEntity> items) {
         this.items = items;
     }
 }

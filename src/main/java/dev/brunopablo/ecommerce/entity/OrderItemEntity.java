@@ -6,10 +6,9 @@ import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
-
 @Entity
 @Table(name="tb_order_item")
-public class OrderItem {
+public class OrderItemEntity {
 
     @EmbeddedId
     private OrderItemId id;
@@ -18,10 +17,10 @@ public class OrderItem {
 
     private Integer quantity;
 
-    public OrderItem() {
+    public OrderItemEntity() {
     }
 
-    public OrderItem(OrderItemId id, Integer quantity, BigDecimal total) {
+    public OrderItemEntity(OrderItemId id, Integer quantity, BigDecimal total) {
         this.id = id;
         this.quantity = quantity;
         this.total = total;
@@ -50,6 +49,4 @@ public class OrderItem {
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
-
-
 }
