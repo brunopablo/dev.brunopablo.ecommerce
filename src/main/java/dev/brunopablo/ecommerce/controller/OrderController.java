@@ -10,26 +10,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import dev.brunopablo.ecommerce.controller.dto.ApiResponse;
-import dev.brunopablo.ecommerce.controller.dto.CreateOrderRequest;
-import dev.brunopablo.ecommerce.controller.dto.OrderItemIdResponse;
-import dev.brunopablo.ecommerce.controller.dto.OrderResponse;
-import dev.brunopablo.ecommerce.controller.dto.PaginationItemResponse;
-import dev.brunopablo.ecommerce.controller.dto.PaginationProductInfoResponse;
-import dev.brunopablo.ecommerce.controller.dto.PaginationRequest;
-import dev.brunopablo.ecommerce.controller.dto.PaginationUserResponse;
+import dev.brunopablo.ecommerce.controller.dto.apiResponse.ApiResponse;
+import dev.brunopablo.ecommerce.controller.dto.createOrderRequest.CreateOrderRequest;
+import dev.brunopablo.ecommerce.controller.dto.paginationOrderResponse.PaginationOrderResponse;
 import dev.brunopablo.ecommerce.service.OrderService;
+import dev.brunopablo.ecommerce.util.Utils;
 
 @RestController
-@RequestMapping("/order")
+@RequestMapping("/orders")
 public class OrderController {
     
     private final OrderService orderService;
+
+    private final Utils util;
     
-    public OrderController(OrderService orderService) {
+    public OrderController(OrderService orderService, Utils util) {
         this.orderService = orderService;
+        this.util = util;
     }
-    
+
+
     @PostMapping
     public ResponseEntity<String> createOrder(@RequestBody CreateOrderRequest newOrderRequest){
             
@@ -40,7 +40,7 @@ public class OrderController {
     
 
     @GetMapping
-    public ResponseEntity<ApiResponse<OrderResponse>> listOrders(
+    public ResponseEntity<ApiResponse<PaginationOrderResponse>> listOrders(
         @RequestParam(name="pageNumber", defaultValue="0") Integer pageNumber,
         @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
         @RequestParam(name="orderBy", defaultValue="desc") String orderBy,
@@ -49,39 +49,12 @@ public class OrderController {
         
         var pages = orderService.listOrders(pageNumber, pageSize, orderBy, userName);
         
-        var orderResponse = pages.getContent().stream().map(
-            page -> new OrderResponse(
-                new PaginationUserResponse(
-                    page.getUser().getId(),
-                    page.getUser().getName()
-                ),
-                page.getTotal(),
-                page.getItems().stream().map(
-                    item -> new PaginationItemResponse(
-                        new OrderItemIdResponse(
-                            item.getId().getOrder().getId(),
-                            item.getId().getProduct().getId()
-                        ),
-                        new PaginationProductInfoResponse(
-                            item.getId().getProduct().getName(),
-                            item.getId().getProduct().getPrice()
-                        ),
-                        item.getQuantity(),
-                        item.getTotal()
-                    )
-                ).toList()
-            )
-        ).toList();
-        
-        
         var apiResponse = new ApiResponse<>(
-            orderResponse,
-            new PaginationRequest(
-                pages.getNumber(),
-                pages.getSize(),
-                pages.getTotalElements(),
-                pages.getTotalPages()
-            )
+            PaginationOrderResponse.getContent(pages),
+            util.makePaginationInfoResponse(pages.getNumber(),
+                                            pages.getSize(),
+                                            pages.getTotalElements(),
+                                            pages.getTotalPages())
         );   
         
         return ResponseEntity.ok(apiResponse);
