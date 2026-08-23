@@ -17,23 +17,17 @@ import dev.brunopablo.ecommerce.util.Utils;
 public class UserService {
     
     private final UserRepository userRepository;
-    
-    private final BillingAddressRepository billingAddressRepository;
 
     private final Utils utils;
     
     public UserService(UserRepository userRepository, BillingAddressRepository billingAddressRepository, Utils utils) {
         this.userRepository = userRepository;
-        this.billingAddressRepository = billingAddressRepository;
         this.utils = utils;
     }
     
     public UserEntity createUser(CreateOrUpdateUserRequest createUserRequest){
         
-        var billingAddresEntity = billingAddressRepository.save(getBillingAddresEntity(createUserRequest));
-        
-        return userRepository.save(getUserEntity(createUserRequest, billingAddresEntity));
-        
+        return userRepository.save(getUserEntity(createUserRequest, getBillingAddresEntity(createUserRequest)));
     }
 
     private UserEntity getUserEntity(CreateOrUpdateUserRequest createUserRequest, BillingAddressEntity billingAddresEntity) {
@@ -101,5 +95,10 @@ public class UserService {
         }
 
         return false;
+    }
+
+    public Optional<UserEntity> findUserById(Long userId) {
+
+        return userRepository.findById(userId);
     }
 }
