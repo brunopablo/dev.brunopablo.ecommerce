@@ -40,7 +40,7 @@ public class UserController {
         
         return ResponseEntity.created(URI.create("/users/" + userEntity.getId())).build();
     }
-    
+
     @GetMapping
     public ResponseEntity<ApiResponse<UserEntity>> listUsers(
         @RequestParam(name="pageNumber", defaultValue="0") Integer pageNumber,
@@ -78,6 +78,16 @@ public class UserController {
 
         return userService.deleteUserById(userId) 
             ? ResponseEntity.noContent().build()
+            : ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserEntity> findUserById(@PathVariable Long userId){
+
+        var userEntity = userService.findUserById(userId);
+
+        return userEntity.isPresent() 
+            ? ResponseEntity.ok(userEntity.get()) 
             : ResponseEntity.notFound().build();
     }
 }
